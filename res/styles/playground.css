@@ -1,0 +1,26 @@
+.playground {
+    display: flex;
+}
+.code-editor,
+.code-output {
+    line-height: 2rem;
+    height: 100vh;
+    min-width: 200px;
+    flex: 1;
+    overflow: auto;
+    font-family: 'Fira Code';
+}
+.code-editor::-webkit-scrollbar,
+.code-output::-webkit-scrollbar {
+    width: 5px;
+}
+.seperator {
+    background: #fff;
+    content: "";
+    width: 1px;
+    cursor: col-resize;
+    background: rgba(255,255,255, 0.1);
+    height: 100vh;
+    border-left: 0.125rem solid var(--main-bg-color);
+    border-right: 0.125rem solid var(--main-bg-color);
+}
