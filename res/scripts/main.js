@@ -58,7 +58,7 @@ async function executeCode()  {
     } catch (e) {
         codeOutput.innerHTML = '<h4 style="color: #ffcc55">😢 Ohh No!</h4>';
         codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e.name + ': <span style="color: #f0f0f0">' + e.message + '</span></h4>';
-        if(typeof e.lineNumber !== undefined)
+        if(typeof e.lineNumber != 'undefined')
             codeOutput.innerHTML += '<h4 style="color: #ff5555">Problem at line number: <span style="color: #f0f0f0">' + e.lineNumber + '</span></h4>';
     }
 }
