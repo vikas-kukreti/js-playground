@@ -8,6 +8,10 @@
     min-width: 200px;
     overflow: auto;
     font-family: 'Fira Code';
+    position: relative;
+}
+.code-output * {
+    font-family: inherit;
 }
 .code-editor {
     flex: 1;
@@ -29,9 +33,6 @@
     border-left: 0.125rem solid var(--main-bg-color);
     border-right: 0.125rem solid var(--main-bg-color);
 }
-.CodeMirror-vscrollbar {
-    display: none !important;
-}
 
 @media only screen and (max-width: 620px) {
     .playground {
@@ -42,6 +43,8 @@
         line-height: 2rem;
         height: 50vh;
         min-width: 100%;
+        max-width: 100%;
+        width: auto;
         overflow: auto;
         font-family: 'Fira Code';
     }
