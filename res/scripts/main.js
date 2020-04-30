@@ -56,9 +56,10 @@ async function executeCode()  {
         codeOutput.innerHTML += '<h4 style="color: #55ff55">💻 Code Returned: <span style="color: #f0f0f0">' + returnValue + '</span></h4>';
         codeOutput.scrollTo(0,codeOutput.scrollHeight);
     } catch (e) {
-        codeOutput.innerHTML = '<h4 style="color: #ff5555">😢 Ohh No!</h4><br/>';
-        codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e + ' at line number ' + e.lineNumber + '</h4>';
-        console.log(e);
+        codeOutput.innerHTML = '<h4 style="color: #ffcc55">😢 Ohh No!</h4>';
+        codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e.name + ': <span style="color: #f0f0f0">' + e.message + '</span></h4>';
+        if(typeof e.lineNumber != undefined)
+            codeOutput.innerHTML += '<h4 style="color: #ff5555">Problem at line number: <span style="color: #f0f0f0">' + e.lineNumber + '</span></h4>';
     }
 }
 
