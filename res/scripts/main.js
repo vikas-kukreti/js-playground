@@ -9,7 +9,7 @@ resizeHandle.addEventListener('click', (e) => {
 });
 
 const editor = CodeMirror(codeEditor, {
-    value: "// write some Javascript Code here\n// to run press ctrl + enter \n// or click on output box\n",
+    value: "// write some js code here\n// to run press ctrl + enter \n// or click on output box\n",
     lineNumbers: true,
     theme: "dracula",
     mode:  "javascript",
