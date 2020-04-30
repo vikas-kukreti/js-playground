@@ -6,13 +6,18 @@
     line-height: 2rem;
     height: 100vh;
     min-width: 200px;
-    flex: 1;
     overflow: auto;
     font-family: 'Fira Code';
 }
+.code-editor {
+    flex: 1;
+}
+.code-output {
+    width: 35%;
+}
 .code-editor::-webkit-scrollbar,
 .code-output::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
 }
 .seperator {
     background: #fff;
@@ -23,4 +28,24 @@
     height: 100vh;
     border-left: 0.125rem solid var(--main-bg-color);
     border-right: 0.125rem solid var(--main-bg-color);
+}
+.CodeMirror-vscrollbar {
+    display: none !important;
+}
+
+@media only screen and (max-width: 620px) {
+    .playground {
+        display: block;
+    }
+    .code-editor,
+    .code-output {
+        line-height: 2rem;
+        height: 50vh;
+        min-width: 100%;
+        overflow: auto;
+        font-family: 'Fira Code';
+    }
+    .seperator {
+        display: none;
+    }
 }

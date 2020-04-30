@@ -29,6 +29,8 @@ codeEditor.addEventListener('keydown', (e) => {
     }
 });
 
+resizeHandle.addEventListener('mousedown', initDrag, false);
+
 async function executeCode()  {
     let output = '';
     console.log = function(value) {
@@ -52,3 +54,20 @@ async function executeCode()  {
         codeOutput.innerHTML = '<h4 style="color: #ff5555">' + e + '</h4>';
     }
 }
+
+let startX, startWidth;
+function initDrag(e) {
+    startX = e.clientX;
+    startWidth = parseInt(document.defaultView.getComputedStyle(codeOutput).width, 10);
+    document.documentElement.addEventListener('mousemove', doDrag, false);
+    document.documentElement.addEventListener('mouseup', stopDrag, false);
+ }
+ 
+ function doDrag(e) {
+    codeOutput.style.width = (startWidth - e.clientX + startX - 5) + 'px';
+ }
+ 
+ function stopDrag(e) {
+     document.documentElement.removeEventListener('mousemove', doDrag, false);
+     document.documentElement.removeEventListener('mouseup', stopDrag, false);
+ }
