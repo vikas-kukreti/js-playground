@@ -9,7 +9,7 @@ resizeHandle.addEventListener('click', (e) => {
 });
 
 const editor = CodeMirror(codeEditor, {
-    value: "function myScript(){return 100;}\n",
+    value: "// write some Javascript Code here\n// to run press ctrl + enter \n//or click on output box\n",
     lineNumbers: true,
     theme: "dracula",
     mode:  "javascript",
@@ -38,7 +38,7 @@ async function executeCode()  {
         if(typeof value == 'string')
             value = value.replace(/(?:\r\n|\r|\n)/g, '<br/>');
         if(typeof value == 'object')
-            value = '<pre>' + JSON.stringify(value, undefined, 4) + '</pre>';
+            value = '<pre>' + JSON.stringify(value, undefined, 2) + '</pre>';
         output += value + '<br/>';
     };
     const code = editor.getValue();
@@ -56,8 +56,8 @@ async function executeCode()  {
         codeOutput.innerHTML += '<h4 style="color: #55ff55">💻 Code Returned: <span style="color: #f0f0f0">' + returnValue + '</span></h4>';
         codeOutput.scrollTo(0,codeOutput.scrollHeight);
     } catch (e) {
-        codeOutput.innerHTML = '<h4 style="color: #ff5555">😢 Ohh No!</h4>';
-        codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e + '</h4>';
+        codeOutput.innerHTML = '<h4 style="color: #ff5555">😢 Ohh No!</h4><br/>';
+        codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e + ' at line number ' + e.lineNumber + '</h4>';
         console.log(e);
     }
 }
