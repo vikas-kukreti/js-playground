@@ -37,6 +37,7 @@ async function executeCode()  {
     const code = editor.getValue();
     if(code.trim() == '') {
         codeOutput.innerHTML = '<h4 style="color: #ff5555">🤣 First write some code, then run it!</h4>';
+        return;
     }
     try {
         const startTime = new Date();
