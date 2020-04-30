@@ -19,7 +19,7 @@ codeOutput.addEventListener('click', (e) => {
     codeOutput.innerHTML = '<h4 style="color: #55ff55">💨 Running ...</h4>';
     setTimeout(() => {
         executeCode();
-    }, 1);
+    }, 0);
     
 });
 
@@ -30,21 +30,24 @@ codeEditor.addEventListener('keydown', (e) => {
 });
 
 async function executeCode()  {
+    let output = '';
     console.log = function(value) {
         output += value + '<br/>';
     };
-    let output = '';
     const code = editor.getValue();
-        try {
-            const startTime = new Date();
-            const returnValue = eval(code);
-            const endTime = new Date();
-            const totalTime = endTime - startTime;
-            codeOutput.innerHTML = output;
-            codeOutput.innerHTML += '</br><h4 style="color: #55ff55">🚀 Execution took ' + totalTime + 'ms</h4>';
-            codeOutput.innerHTML += '<h4 style="color: #55ff55">💻 Code Returned: ' + returnValue + '</h4>';
-            codeOutput.scrollTo(0,codeOutput.scrollHeight);
-        } catch (e) {
-            codeOutput.innerHTML = '<h4 style="color: #ff5555">' + e + '</h4>';
-        }
+    if(code.trim() == '') {
+        codeOutput.innerHTML = '<h4 style="color: #ff5555">🤣 First write some code, then run it!</h4>';
+    }
+    try {
+        const startTime = new Date();
+        const returnValue = eval(code);
+        const endTime = new Date();
+        const totalTime = endTime - startTime;
+        codeOutput.innerHTML = output;
+        codeOutput.innerHTML += '</br><h4 style="color: #55ff55">🚀 Execution took ' + totalTime + 'ms</h4>';
+        codeOutput.innerHTML += '<h4 style="color: #55ff55">💻 Code Returned: <span style="color: #f0f0f0">' + returnValue + '</span></h4>';
+        codeOutput.scrollTo(0,codeOutput.scrollHeight);
+    } catch (e) {
+        codeOutput.innerHTML = '<h4 style="color: #ff5555">' + e + '</h4>';
+    }
 }
