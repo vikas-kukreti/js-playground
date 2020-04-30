@@ -61,13 +61,13 @@ function initDrag(e) {
     startWidth = parseInt(document.defaultView.getComputedStyle(codeOutput).width, 10);
     document.documentElement.addEventListener('mousemove', doDrag, false);
     document.documentElement.addEventListener('mouseup', stopDrag, false);
- }
- 
- function doDrag(e) {
+}
+
+function doDrag(e) {
     codeOutput.style.width = (startWidth - e.clientX + startX - 5) + 'px';
- }
- 
- function stopDrag(e) {
-     document.documentElement.removeEventListener('mousemove', doDrag, false);
-     document.documentElement.removeEventListener('mouseup', stopDrag, false);
- }
+}
+
+function stopDrag(e) {
+    document.documentElement.removeEventListener('mousemove', doDrag, false);
+    document.documentElement.removeEventListener('mouseup', stopDrag, false);
+}
