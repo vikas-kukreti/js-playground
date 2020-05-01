@@ -3,11 +3,6 @@ const codeOutput = document.querySelector('#output');
 const resizeHandle = document.querySelector('#resizer');
 
 
-
-resizeHandle.addEventListener('click', (e) => {
-    console.log(e);
-});
-
 const editor = CodeMirror(codeEditor, {
     value: "// write some js code here\n// to run press ctrl + enter \n// or click on output box\n",
     lineNumbers: true,
@@ -20,7 +15,7 @@ codeOutput.addEventListener('click', (e) => {
     codeOutput.innerHTML = '<h4 style="color: #55ff55">💨 Running ...</h4>';
     setTimeout(() => {
         executeCode();
-    }, 0);
+    }, 1);
     
 });
 
@@ -32,7 +27,7 @@ codeEditor.addEventListener('keydown', (e) => {
 
 resizeHandle.addEventListener('mousedown', initDrag, false);
 
-async function executeCode()  {
+function executeCode()  {
     let output = '';
     console.log = function(value) {
         if(typeof value == 'string')
