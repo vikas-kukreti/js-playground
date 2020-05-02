@@ -81,7 +81,8 @@
 }
 .file-pane .modified::before {
     display: flex;
-    content: '* ';
+    content: '*';
+    margin-right: 4px;
     color: rgb(238, 83, 83);
 }
 .seperator {

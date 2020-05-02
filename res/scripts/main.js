@@ -97,7 +97,7 @@ document.addEventListener('keydown', (e) => {
     if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
         e.preventDefault();
         if(!currentFile) {
-            createFile();
+            createFile(true);
         } else {
             localStorage.setItem(currentFile, editor.getValue());
             modified = false;
@@ -106,7 +106,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-function createFile() {
+function createFile(save) {
     currentFile = prompt('Enter file name');
     if(!currentFile)
         return;
@@ -117,10 +117,16 @@ function createFile() {
         files = files.split(',');
     else
         files = []
+    if(files.indexOf(currentFile) > -1)
+        return;
     files.push(currentFile);
     localStorage.setItem('files', files);
-    localStorage.setItem(currentFile, '// ' + currentFile +': write some code');
-    editor.setValue( '// ' + currentFile +': write some code');
+    if(save) {
+        localStorage.setItem(currentFile, editor.getValue());
+    } else {
+        localStorage.setItem(currentFile, '// ' + currentFile +': write some code');
+        editor.setValue( '// ' + currentFile +': write some code');
+    }
     refreshFileMenu();
 }
 
