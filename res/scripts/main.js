@@ -1,15 +1,18 @@
+const fileMenu = document.querySelector('.file-pane');
 const codeEditor = document.querySelector('#editor');
 const codeOutput = document.querySelector('#output');
 const resizeHandle = document.querySelector('#resizer');
-
+let currentFile = '';
+let modified = false;
 
 const editor = CodeMirror(codeEditor, {
-    value: "// write some js code here\n// to run press ctrl + enter \n// or click on output box\n",
+    value: "// write some js code here\n// press ctrl + s to save \n// to run press ctrl + enter \n// or click on output box\n",
     lineNumbers: true,
     theme: "dracula",
     mode:  "javascript",
     scrollbarStyle: "null"
 });
+
 
 codeOutput.addEventListener('click', (e) => {
     codeOutput.innerHTML = '<h4 style="color: #55ff55">💨 Running ...</h4>';
@@ -23,12 +26,26 @@ codeEditor.addEventListener('keydown', (e) => {
     if (event.ctrlKey && event.keyCode === 13) {
         codeOutput.click();
     }
+    if(!modified && editor.getValue() != localStorage.getItem(currentFile)) {
+        if(fileMenu.querySelector('.current')) {
+            modified = true;
+            fileMenu.querySelector('.current').classList.add('modified');
+        }
+    }
 });
+
 
 resizeHandle.addEventListener('mousedown', initDrag, false);
 
 function executeCode()  {
+    "use strict";
     let output = '';
+    const setInterval = function(x,y) {
+        console.log("setInterval is not supported!")
+    }
+    const setTimeout = function(x,y) {
+        console.log("setTimeout is not supported!")
+    }
     console.log = function(value) {
         if(typeof value == 'string')
             value = value.replace(/(?:\r\n|\r|\n)/g, '<br/>');
@@ -53,8 +70,9 @@ function executeCode()  {
     } catch (e) {
         codeOutput.innerHTML = '<h4 style="color: #ffcc55">😢 Ohh No!</h4>';
         codeOutput.innerHTML += '<h4 style="color: #ff5555">' + e.name + ': <span style="color: #f0f0f0">' + e.message + '</span></h4>';
-        if(typeof e.lineNumber != 'undefined')
-            codeOutput.innerHTML += '<h4 style="color: #ff5555">Problem at line number: <span style="color: #f0f0f0">' + e.lineNumber + '</span></h4>';
+        if(e.lineNumber == undefined)
+            e.lineNumber = e.stack.split('>:')[1].split(':')[0];
+        codeOutput.innerHTML += '<h4 style="color: #ff5555">Problem at line number: <span style="color: #f0f0f0">' + e.lineNumber + '</span></h4>';
     }
 }
 
@@ -67,10 +85,84 @@ function initDrag(e) {
 }
 
 function doDrag(e) {
-    codeOutput.style.width = (startWidth - e.clientX + startX - 5) + 'px';
+    codeOutput.style.width = (startWidth - e.clientX + startX) + 'px';
 }
 
 function stopDrag(e) {
     document.documentElement.removeEventListener('mousemove', doDrag, false);
     document.documentElement.removeEventListener('mouseup', stopDrag, false);
 }
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
+        e.preventDefault();
+        if(!currentFile) {
+            createFile();
+        } else {
+            localStorage.setItem(currentFile, editor.getValue());
+            modified = false;
+            refreshFileMenu();
+        }
+    }
+});
+
+function createFile() {
+    currentFile = prompt('Enter file name');
+    if(!currentFile)
+        return;
+    else if(currentFile.indexOf(',') > -1)
+        return;
+    let files = localStorage.getItem('files');
+    if(files)
+        files = files.split(',');
+    else
+        files = []
+    files.push(currentFile);
+    localStorage.setItem('files', files);
+    localStorage.setItem(currentFile, '// ' + currentFile +': write some code');
+    editor.setValue( '// ' + currentFile +': write some code');
+    refreshFileMenu();
+}
+
+
+function refreshFileMenu() {
+    fileMenu.querySelector('.files').innerHTML = '';
+    if(files = localStorage.getItem('files')) {
+        files = files.split(',');
+        files.forEach(file => {
+            const fileItem = document.createElement('li');
+            fileItem.innerText += file;
+            if(file == currentFile) {
+                fileItem.className = 'current';
+            }
+            fileItem.setAttribute('data-file', file);
+            const deleteBtn = document.createElement('span');
+            deleteBtn.className = 'delete';
+            deleteBtn.textContent = 'X';
+            fileItem.appendChild(deleteBtn);
+            fileMenu.querySelector('.files').appendChild(fileItem);
+            fileItem.addEventListener('click', (e) => {
+                if(e.target != fileItem)
+                    return;
+                currentFile = fileItem.getAttribute('data-file');
+                const textContent = localStorage.getItem(currentFile) || '// write some code';
+                editor.setValue(textContent);
+                refreshFileMenu();
+            });
+            deleteBtn.addEventListener('click', ()=>{
+                const index = files.indexOf(fileItem.getAttribute('data-file'));
+                if (index > -1) {
+                    editor.setValue('// write some code');
+                    files.splice(index, 1);
+                    localStorage.setItem('files', files);
+                    localStorage.removeItem(fileItem.getAttribute('data-file'))
+                    currentFile = '';
+                    refreshFileMenu();
+                }
+            });
+        });
+    }
+    
+}
+
+refreshFileMenu();

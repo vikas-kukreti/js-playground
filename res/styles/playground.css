@@ -1,6 +1,8 @@
 .playground {
     display: flex;
+    padding-left: 10px;
 }
+.file-pane,
 .code-editor,
 .code-output {
     line-height: 2rem;
@@ -9,6 +11,40 @@
     overflow: auto;
     font-family: 'Fira Code';
     position: relative;
+}
+.file-pane {
+    position: fixed;
+    left: -190px;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    z-index: 99999;
+    transition: 0.1s left ease;
+    background-color: #3a2f4e;
+}
+.file-pane .new,
+.file-pane li {
+    padding: .25rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.file-pane .new {
+    background: rgba(0,0,0, 0.1);
+    border-radius: 2rem;
+    margin: 0.5rem 1rem;
+}
+.file-pane li {
+    border-bottom: 1px solid rgba(0,0,0, 0.3);
+}
+.file-pane .new:hover {
+    background: rgba(255,255,255, 0.1);
+}
+.file-pane li:hover {
+    background: rgba(255,255,255, 0.08);
+}
+.file-pane:hover {
+    left: 0;
 }
 .code-output * {
     font-family: inherit;
@@ -22,6 +58,31 @@
 .code-editor::-webkit-scrollbar,
 .code-output::-webkit-scrollbar {
     width: 2px;
+}
+.file-pane::-webkit-scrollbar {
+    width: 5px;
+}
+.file-pane .delete {
+    margin-left: auto;
+    height: 1rem;
+    width: 1rem;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: right;
+    padding: 0.25rem;
+    border-radius: 50%;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(179, 17, 17, 0.822);
+}
+.file-pane .current {
+    background: var(--main-bg-color);
+}
+.file-pane .modified::before {
+    display: flex;
+    content: '* ';
+    color: rgb(238, 83, 83);
 }
 .seperator {
     background: #fff;
