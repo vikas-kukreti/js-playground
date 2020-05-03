@@ -38,6 +38,10 @@ codeEditor.addEventListener('keydown', (e) => {
 resizeHandle.addEventListener('mousedown', initDrag, false);
 
 function executeCode()  {
+    const document = undefined;
+    const window = undefined;
+    const location = undefined;
+    const vikas = vex.dialog;
     "use strict";
     let output = '';
     const setInterval = function(x,y) {
@@ -94,7 +98,7 @@ function stopDrag(e) {
 }
 
 document.addEventListener('keydown', (e) => {
-    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
+    if (e.keyCode == 83 && e.ctrlKey) {
         e.preventDefault();
         if(!currentFile) {
             createFile(true);
@@ -107,27 +111,42 @@ document.addEventListener('keydown', (e) => {
 });
 
 function createFile(save) {
-    currentFile = prompt('Enter file name');
-    if(!currentFile)
-        return;
-    else if(currentFile.indexOf(',') > -1)
-        return;
-    let files = localStorage.getItem('files');
-    if(files)
-        files = files.split(',');
-    else
-        files = []
-    if(files.indexOf(currentFile) > -1)
-        return;
-    files.push(currentFile);
-    localStorage.setItem('files', files);
-    if(save) {
-        localStorage.setItem(currentFile, editor.getValue());
-    } else {
-        localStorage.setItem(currentFile, '// ' + currentFile +': write some code');
-        editor.setValue( '// ' + currentFile +': write some code');
-    }
-    refreshFileMenu();
+    vex.dialog.prompt({
+        message: 'Provide file name',
+        placeholder: 'File name',
+        callback: function (value) {
+            if(!value) {
+                vex.dialog.alert("Empty file name provided!")
+                return;
+
+            }
+            else if(value.indexOf(',') > -1) {
+                vex.dialog.alert("You cannot use special characters in file name!");
+                return;
+            }
+                
+            let files = localStorage.getItem('files');
+            if(files)
+                files = files.split(',');
+            else
+                files = []
+            if(files.indexOf(value) > -1) {
+                vex.dialog.alert("This name is already in use!");
+                return;
+            }
+                
+            currentFile = value;
+            files.push(currentFile);
+            localStorage.setItem('files', files);
+            if(save) {
+                localStorage.setItem(currentFile, editor.getValue());
+            } else {
+                localStorage.setItem(currentFile, '// ' + currentFile +': write some code');
+                editor.setValue( '// ' + currentFile +': write some code');
+            }
+            refreshFileMenu();
+        }
+    });
 }
 
 
@@ -156,18 +175,26 @@ function refreshFileMenu() {
                 refreshFileMenu();
             });
             deleteBtn.addEventListener('click', ()=>{
-                const index = files.indexOf(fileItem.getAttribute('data-file'));
-                if (index > -1) {
-                    editor.setValue('// write some code');
-                    files.splice(index, 1);
-                    localStorage.setItem('files', files);
-                    localStorage.removeItem(fileItem.getAttribute('data-file'))
-                    currentFile = '';
-                    refreshFileMenu();
-                }
+                vex.dialog.confirm({
+                    message: 'Are you sure you want to delete ' + fileItem.getAttribute('data-file') + '?',
+                    callback: function (value) {
+                        if (value) {
+                            const index = files.indexOf(fileItem.getAttribute('data-file'));
+                            if (index > -1) {
+                                editor.setValue('// write some code');
+                                files.splice(index, 1);
+                                localStorage.setItem('files', files);
+                                localStorage.removeItem(fileItem.getAttribute('data-file'))
+                                currentFile = '';
+                                refreshFileMenu();
+                            }
+                        }
+                    }
+                });
             });
         });
     }
+    editor.focus();
     
 }
 
